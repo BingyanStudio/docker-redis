@@ -1,0 +1,19 @@
+services: docker
+language: bash
+
+env:
+  global:
+    - IMAGE_PREFIX=${IMAGE_PREFIX:-$DOCKER_USER/}
+    - PUSH_LIST=/tmp/push_list
+    - IMAGE_NAME=redis
+  matrix:
+    - SUBDIR=2.8 TAGS="latest"
+    - SUBDIR=3.0
+script:
+  - cp -r utils "$SUBDIR/"
+  - ./build.sh
+
+after_script:
+  - docker images
+  - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD" -e "$DOCKER_EMAIL"
+  - for x in $(cat "$PUSH_LIST"); do docker push $x; done
