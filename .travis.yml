@@ -10,7 +10,6 @@ env:
     - SUBDIR=2.8 TAGS="latest"
     - SUBDIR=3.0
 script:
-  - cp -r utils "$SUBDIR/"
   - ./build.sh
 
 after_script:
